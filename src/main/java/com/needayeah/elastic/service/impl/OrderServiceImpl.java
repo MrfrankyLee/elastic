@@ -48,11 +48,9 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Result<Page<OrderSearchResponse>> searchByRequest(OrderSearchRequest request) {
         SearchRequest searchRequest = new SearchRequest(ORDER_INDEX);
-        SearchSourceBuilder builder = new SearchSourceBuilder();
-        builder.trackTotalHits(true);
-        builder.from(request.getPageNo() == 0 ? 1 : request.getPageNo());
-        builder.size(request.getPageSize() == 0 ? 1000 : request.getPageSize());
-        builder.query(getBuildQuery(request));
+        SearchSourceBuilder builder = new SearchSourceBuilder().query(getBuildQuery(request)).trackTotalHits(true);
+        builder.from(request.getPageNo());
+        builder.size(request.getPageSize() == 0 ? 100 : request.getPageSize());
         searchRequest.source(builder);
         List<OrderSearchResponse> responseList = Lists.newArrayList();
         try {
@@ -102,8 +100,8 @@ public class OrderServiceImpl implements OrderService {
         if(StringUtils.hasLength(request.getReceiverDistrict())) {
             queryBuilder.must(QueryBuilders.termQuery(BeanUtils.getBeanFieldName(OrderSearchRequest::getReceiverDistrict),request.getReceiverDistrict()));
         }
-        if(StringUtils.hasLength(request.getReceiverAddress())) {
-            queryBuilder.must(QueryBuilders.matchPhraseQuery(BeanUtils.getBeanFieldName(OrderSearchRequest::getReceiverAddress),request.getReceiverAddress()));
+        if (StringUtils.hasLength(request.getReceiverAddress())) {
+            queryBuilder.must(QueryBuilders.matchPhraseQuery(BeanUtils.getBeanFieldName(OrderSearchRequest::getReceiverAddress), request.getReceiverAddress()));
         }
         return queryBuilder;
     }
