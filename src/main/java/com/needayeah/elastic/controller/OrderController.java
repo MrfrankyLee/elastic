@@ -33,4 +33,9 @@ public class OrderController implements OrderFace {
     public Result<String> initOrderForES(@RequestParam("from") int from , @RequestParam("size") int size) {
         return orderService.initOrderForES(from,size);
     }
+
+    @Override
+    public Result<String> initJDGoodsForES(String keyWord) {
+        return orderService.initJDGoodsForES(keyWord);
+    }
 }

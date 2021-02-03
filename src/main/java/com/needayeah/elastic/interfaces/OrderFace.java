@@ -4,6 +4,7 @@ import com.needayeah.elastic.common.Page;
 import com.needayeah.elastic.common.Result;
 import com.needayeah.elastic.interfaces.reponse.OrderSearchResponse;
 import com.needayeah.elastic.interfaces.request.OrderSearchRequest;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,4 +30,11 @@ public interface OrderFace {
      */
     @PostMapping("initOrderForES")
     Result<String> initOrderForES(@RequestParam("from") int from , @RequestParam("size") int size);
+
+    /**
+     * 京东商品初始化加载到ES
+     * @return
+     */
+    @PostMapping("initJDGoodsForES")
+    Result<String> initJDGoodsForES(@Param("keyWord") String keyWord);
 }

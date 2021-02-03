@@ -15,4 +15,6 @@ public interface OrderService {
     Result<Page<OrderSearchResponse>> searchByRequest(OrderSearchRequest request);
 
     Result<String> initOrderForES(int from, int size);
+
+    Result<String> initJDGoodsForES(String keyWord);
 }
