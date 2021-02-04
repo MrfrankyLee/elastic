@@ -2,6 +2,7 @@ package com.needayeah.elastic.interfaces;
 
 import com.needayeah.elastic.common.Page;
 import com.needayeah.elastic.common.Result;
+import com.needayeah.elastic.interfaces.reponse.JdGoodsResponse;
 import com.needayeah.elastic.interfaces.reponse.OrderSearchResponse;
 import com.needayeah.elastic.interfaces.request.OrderSearchRequest;
 import org.apache.ibatis.annotations.Param;
@@ -37,4 +38,11 @@ public interface OrderFace {
      */
     @PostMapping("initJDGoodsForES")
     Result<String> initJDGoodsForES(@Param("keyWord") String keyWord);
+
+    /**
+     * 根据关键字搜索商品
+     * @return
+     */
+    @PostMapping("searchJdGoods")
+    Result<Page<JdGoodsResponse>> searchJdGoods(@Param("keyWord") String keyWord);
 }

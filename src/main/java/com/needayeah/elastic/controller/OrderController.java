@@ -3,6 +3,7 @@ package com.needayeah.elastic.controller;
 import com.needayeah.elastic.common.Page;
 import com.needayeah.elastic.common.Result;
 import com.needayeah.elastic.interfaces.OrderFace;
+import com.needayeah.elastic.interfaces.reponse.JdGoodsResponse;
 import com.needayeah.elastic.interfaces.reponse.OrderSearchResponse;
 import com.needayeah.elastic.interfaces.request.OrderSearchRequest;
 import com.needayeah.elastic.service.OrderService;
@@ -37,5 +38,10 @@ public class OrderController implements OrderFace {
     @Override
     public Result<String> initJDGoodsForES(String keyWord) {
         return orderService.initJDGoodsForES(keyWord);
+    }
+
+    @Override
+    public Result<Page<JdGoodsResponse>> searchJdGoods(String keyWord) {
+        return orderService.searchJdGoods(keyWord);
     }
 }

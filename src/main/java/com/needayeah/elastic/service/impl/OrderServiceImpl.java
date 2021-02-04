@@ -9,6 +9,7 @@ import com.needayeah.elastic.common.utils.HtmlParseUtil;
 import com.needayeah.elastic.domain.OrderDomain;
 import com.needayeah.elastic.entity.JdGoods;
 import com.needayeah.elastic.entity.Order;
+import com.needayeah.elastic.interfaces.reponse.JdGoodsResponse;
 import com.needayeah.elastic.interfaces.reponse.OrderSearchResponse;
 import com.needayeah.elastic.interfaces.request.OrderSearchRequest;
 import com.needayeah.elastic.service.OrderService;
@@ -21,7 +22,10 @@ import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.query.TermQueryBuilder;
+import org.elasticsearch.index.query.TermsQueryBuilder;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.jsoup.Jsoup;
@@ -113,6 +117,35 @@ public class OrderServiceImpl implements OrderService {
         }
         return Result.success("搞定");
     }
+
+    @Override
+    public Result<Page<JdGoodsResponse>> searchJdGoods(String keyWord) {
+        SearchRequest searchRequest = new SearchRequest(JD_GOODS);
+        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+        sourceBuilder.trackTotalHits(true).query(getSearchBuild(keyWord));
+        sourceBuilder.from(0);
+        sourceBuilder.size(5000);
+        searchRequest.source(sourceBuilder);
+        List<JdGoodsResponse> list = Lists.newArrayList();
+        try {
+            SearchResponse searchResponse = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
+            for (SearchHit hit : searchResponse.getHits().getHits()) {
+                list.add(JSON.parseObject(hit.getSourceAsString(), JdGoodsResponse.class));
+            }
+            Page<JdGoodsResponse> pageResult = Page.of(searchResponse.getHits().getTotalHits().value, list);
+            return Result.success(pageResult);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return Result.error(1, "查询失败");
+    }
+
+    private QueryBuilder getSearchBuild(String keyWord) {
+        BoolQueryBuilder boolQueryBuilder = new BoolQueryBuilder();
+        boolQueryBuilder.must(QueryBuilders.matchPhraseQuery(BeanUtils.getBeanFieldName(JdGoods::getGoodsName), keyWord));
+        return boolQueryBuilder;
+    }
+
 
     private BoolQueryBuilder getBuildQuery(OrderSearchRequest request) {
         BoolQueryBuilder queryBuilder = new BoolQueryBuilder();

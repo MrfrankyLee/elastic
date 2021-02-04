@@ -2,6 +2,7 @@ package com.needayeah.elastic.service;
 
 import com.needayeah.elastic.common.Page;
 import com.needayeah.elastic.common.Result;
+import com.needayeah.elastic.interfaces.reponse.JdGoodsResponse;
 import com.needayeah.elastic.interfaces.reponse.OrderSearchResponse;
 import com.needayeah.elastic.interfaces.request.OrderSearchRequest;
 
@@ -17,4 +18,6 @@ public interface OrderService {
     Result<String> initOrderForES(int from, int size);
 
     Result<String> initJDGoodsForES(String keyWord);
+
+    Result<Page<JdGoodsResponse>> searchJdGoods(String keyWord);
 }
