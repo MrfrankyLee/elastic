@@ -31,7 +31,7 @@ public class HtmlParseUtil {
         try {
             String url = "https://search.jd.com/Search?keyword=" + keyWord;
             // 解析网页
-            Document document = Jsoup.parse(new URL(url), 30000);
+            Document document = Jsoup.connect(url).userAgent("Mozilla").get();
             Element element = document.getElementById("J_goodsList");
             Elements elements = element.getElementsByTag("li");
             for (Element el : elements) {
