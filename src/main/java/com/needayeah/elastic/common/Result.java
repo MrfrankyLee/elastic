@@ -1,5 +1,6 @@
 package com.needayeah.elastic.common;
 
+import com.needayeah.elastic.common.page.Page;
 import org.springframework.util.CollectionUtils;
 import java.io.Serializable;
 import java.util.Collection;

@@ -2,7 +2,7 @@ package com.needayeah.elastic.domain;
 
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
-import com.needayeah.elastic.common.Pair;
+import com.needayeah.elastic.common.page.Pair;
 import com.needayeah.elastic.common.utils.BeanUtils;
 import com.needayeah.elastic.common.utils.FileUtils;
 import com.needayeah.elastic.config.es.EsIndexConfig;
@@ -25,6 +25,7 @@ import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -106,7 +107,7 @@ public class XaHouseEsDomain implements EsIndexConfig {
                 .query(getBoolQueryBuilder(condition))
                 .trackTotalHits(true);
         if (pageQuery && condition.getPageSize() != 0) {
-            sourceBuilder.sort(BeanUtils.getBeanFieldName(XaHouse::getTotalPrice));
+            sourceBuilder.sort(BeanUtils.getBeanFieldName(XaHouse::getBuildYear), SortOrder.DESC);
             sourceBuilder.sort(ES_ID);
             sourceBuilder.from(condition.getPageFrom()).size(condition.getPageSize());
         } else {

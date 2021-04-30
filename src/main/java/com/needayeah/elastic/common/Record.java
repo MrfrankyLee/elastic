@@ -1,10 +1,12 @@
 package com.needayeah.elastic.common;
 
 
+import com.google.common.collect.Lists;
+import com.needayeah.elastic.common.page.Pair;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.lang.Nullable;
-import com.google.common.collect.Lists;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;
@@ -19,7 +21,7 @@ public class Record implements Cloneable {
     private Pair<List<BizRecord>, List<BizRecord>> bizRecordPair;
 
     public Record recordSuccess(List<String> subjectIds, @Nullable Supplier<String> reasonSupplier) {
-        if(bizRecordPair == null) {
+        if (bizRecordPair == null) {
             newRecordPair();
         }
         buildBizRecord(subjectIds, reasonSupplier, bizRecordPair.getLeft());
@@ -48,7 +50,7 @@ public class Record implements Cloneable {
     }
 
     public Record recordSuccess(String subjectId, String operationDesc) {
-        if(bizRecordPair == null) {
+        if (bizRecordPair == null) {
             newRecordPair();
         }
         BizRecord record = BizRecord.builder()
@@ -60,7 +62,7 @@ public class Record implements Cloneable {
     }
 
     public Record recordFailure(String subjectId, String operationDesc) {
-        if(bizRecordPair == null) {
+        if (bizRecordPair == null) {
             newRecordPair();
         }
         BizRecord record = BizRecord.builder()
@@ -80,7 +82,7 @@ public class Record implements Cloneable {
     }
 
     public Record recordFailure(List<String> subjectIds, @Nullable Supplier<String> reasonSupplier) {
-        if(bizRecordPair == null) {
+        if (bizRecordPair == null) {
             newRecordPair();
         }
         buildBizRecord(subjectIds, reasonSupplier, bizRecordPair.getRight());
@@ -88,7 +90,7 @@ public class Record implements Cloneable {
     }
 
     private void buildBizRecord(List<String> subjectIds, Supplier<String> reasonSupplier, List<BizRecord> records) {
-        for(String subjectId : subjectIds) {
+        for (String subjectId : subjectIds) {
             BizRecord record = BizRecord.builder()
                     .subjectId(subjectId)
                     .operation(reasonSupplier == null ? null : reasonSupplier.get())
@@ -99,7 +101,7 @@ public class Record implements Cloneable {
 
 
     @Override
-    public Record clone()  {
+    public Record clone() {
         Record record = new Record();
         record.setBizRecordPair(this.bizRecordPair);
         return record;

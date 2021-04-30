@@ -2,7 +2,7 @@ package com.needayeah.elastic.domain;
 
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
-import com.needayeah.elastic.common.Pair;
+import com.needayeah.elastic.common.page.Pair;
 import com.needayeah.elastic.common.utils.BeanUtils;
 import com.needayeah.elastic.common.utils.FileUtils;
 import com.needayeah.elastic.config.es.EsIndexConfig;
