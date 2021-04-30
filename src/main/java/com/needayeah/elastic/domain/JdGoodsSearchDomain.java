@@ -91,6 +91,7 @@ public class JdGoodsSearchDomain implements EsIndexConfig {
         }
         try {
             BulkResponse response = restHighLevelClient.bulk(bulkRequest, RequestOptions.DEFAULT);
+            refresh();
             return !response.hasFailures();
         } catch (Exception e) {
             log.error("batch update refund order to es failed, cause is:", e);

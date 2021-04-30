@@ -53,12 +53,10 @@ public class AliYunSmsFactory {
 
     private static String domain = "dysmsapi.aliyuncs.com";
 
-    private static final String SMS_ORDER_KEY = "orderId";
-
     private IAcsClient iAcsClient;
 
     public IAcsClient getIAcsClient() {
-        if (iAcsClient == null) {
+        if (Objects.isNull(iAcsClient)) {
             IClientProfile profile = DefaultProfile.getProfile(regionId, accessKeyId, accessKeySecret);
             try {
                 DefaultProfile.addEndpoint(regionId, product, domain);
