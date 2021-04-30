@@ -1,3 +1,18 @@
 spring:
   profiles:
     active: dev
+server:
+  port: 8088
+
+#showSql
+#logging:
+#  level:
+#    com:
+#      needayeah:
+#          elastic:
+#            mapper: debug
+
+elasticsearch:
+  restHighLevel:
+    Client:
+      hosts: 212.64.17.12:9200

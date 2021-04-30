@@ -16,7 +16,6 @@ import org.springframework.context.annotation.ConditionContext;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.type.AnnotatedTypeMetadata;
-import tk.mybatis.mapper.util.StringUtil;
 
 import java.util.ArrayList;
 
@@ -72,7 +71,7 @@ public class EsConfiguration {
             if (Strings.isEmpty(host)) {
                 continue;
             }
-            String[] hostAndPort = host.split(",");
+            String[] hostAndPort = host.split(":");
             if (hostAndPort.length == 2 && !Strings.isEmpty(hostAndPort[1])) {
                 hostList.add(new HttpHost(hostAndPort[0], Integer.parseInt(hostAndPort[1]), schema));
             } else if (hostAndPort.length == 1) {
@@ -91,7 +90,7 @@ public class EsConfiguration {
                 .setHttpClientConfigCallback(httpClientBuilder -> {
                     httpClientBuilder.setMaxConnTotal(maxConnectNum);
                     httpClientBuilder.setMaxConnPerRoute(maxConnectPerRoute);
-                    if (StringUtil.isNotEmpty(userName) && StringUtil.isNotEmpty(password)) {
+                    if (!Strings.isEmpty(userName) && !Strings.isEmpty(password)) {
                         CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
                         credentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(userName, password));
                         return httpClientBuilder.setDefaultCredentialsProvider(credentialsProvider);
@@ -105,15 +104,10 @@ public class EsConfiguration {
 
 
     public static class EnableEsCondition implements Condition {
-        /**
-         * 动态启用elasticSearch
-         */
-        @Value("elasticsearch.restHighLevel.Client.enable:true")
-        private Boolean enable;
-
         @Override
         public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
-            return enable;
+            // 可加入配置中心 动态开闭ES
+            return true;
         }
     }
 

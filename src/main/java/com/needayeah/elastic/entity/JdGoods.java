@@ -16,6 +16,11 @@ import lombok.NoArgsConstructor;
 public class JdGoods {
 
     /**
+     * id
+     */
+    private String id;
+
+    /**
      * 店铺名称
      */
     private String shopName;
@@ -28,7 +33,7 @@ public class JdGoods {
     /**
      * 价格
      */
-    private String price;
+    private Double price;
 
     /**
      * 图片

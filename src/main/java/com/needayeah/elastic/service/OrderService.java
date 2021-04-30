@@ -2,9 +2,10 @@ package com.needayeah.elastic.service;
 
 import com.needayeah.elastic.common.Page;
 import com.needayeah.elastic.common.Result;
+import com.needayeah.elastic.entity.XaHouse;
 import com.needayeah.elastic.interfaces.reponse.JdGoodsResponse;
-import com.needayeah.elastic.interfaces.reponse.OrderSearchResponse;
-import com.needayeah.elastic.interfaces.request.OrderSearchRequest;
+import com.needayeah.elastic.interfaces.request.JdGoodsSearchRequest;
+import com.needayeah.elastic.interfaces.request.XaHousesSearchRequest;
 
 /**
  * @author lixiaole
@@ -13,11 +14,11 @@ import com.needayeah.elastic.interfaces.request.OrderSearchRequest;
 
 public interface OrderService {
 
-    Result<Page<OrderSearchResponse>> searchByRequest(OrderSearchRequest request);
-
-    Result<String> initOrderForES(int from, int size);
-
     Result<String> initJDGoodsForES(String keyWord);
 
-    Result<Page<JdGoodsResponse>> searchJdGoods(String keyWord);
+    Result<Page<JdGoodsResponse>> searchJdGoods(JdGoodsSearchRequest jdGoodsSearchRequest);
+
+    Result<String> initXaHouseForES(Integer count);
+
+    Result<Page<XaHouse>> searchXaHouse(XaHousesSearchRequest request);
 }

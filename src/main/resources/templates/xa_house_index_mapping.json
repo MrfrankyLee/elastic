@@ -1,0 +1,58 @@
+{
+  "properties": {
+    "id": {
+      "type": "keyword"
+    },
+    "title": {
+      "type": "text",
+      "fields": {
+        "keyword": {
+          "type": "keyword",
+          "ignore_above": 256
+        }
+      }
+    },
+    "unitType": {
+      "type": "keyword"
+    },
+    "area": {
+      "type": "double"
+    },
+    "storeyHeight": {
+      "type": "text",
+      "fields": {
+        "keyword": {
+          "type": "keyword",
+          "ignore_above": 256
+        }
+      }
+    },
+    "towards": {
+      "type": "text",
+      "fields": {
+        "keyword": {
+          "type": "keyword",
+          "ignore_above": 256
+        }
+      }
+    },
+    "buildYear": {
+      "type": "integer"
+    },
+    "address": {
+      "type": "text",
+      "fields": {
+        "keyword": {
+          "type": "keyword",
+          "ignore_above": 256
+        }
+      }
+    },
+    "totalPrice": {
+      "type": "double"
+    },
+    "unitPrice": {
+      "type": "double"
+    }
+  }
+}

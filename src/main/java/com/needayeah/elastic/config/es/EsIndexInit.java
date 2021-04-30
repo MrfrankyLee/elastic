@@ -51,6 +51,7 @@ public class EsIndexInit {
     public static class Load implements Condition {
         @Override
         public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
+            // 可动态配置
             return true;
         }
     }

@@ -27,7 +27,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class DateUtil{
+public class DateUtil {
 
     public final static int MILLISECOND_MAX = 999;
 
@@ -876,32 +876,9 @@ public class DateUtil{
      */
     public static Date timeStamptoShortDate(long time) {
         String result1 = new SimpleDateFormat(DEFAULT_SHORT_DATE_FORMAT).format(new Date(time));
-        Date date1 = parse(result1);   //对应的就是时间戳对应的Date
+        Date date1 = parse(result1);
         return date1;
 
-    }
-
-    /**
-     * 将2017-03-09 00:00:00格式的日期转换为17-3-9 00:00:00
-     *
-     * @param date 传入的日期
-     * @return 返回的日期
-     */
-    public static String conversionFormat(String date) {
-
-        String newTime = date.substring(2);
-        int index = newTime.indexOf("-");
-
-        if (org.apache.commons.codec.binary.StringUtils.equals("0", newTime.substring(index + 1, index + 2))) {
-            newTime = newTime.substring(0, index + 1) + newTime.substring(index + 2);
-        }
-
-        int lastIndex = newTime.lastIndexOf("-");
-        if (org.apache.commons.codec.binary.StringUtils.equals("0", newTime.substring(lastIndex + 1, lastIndex + 2))) {
-            newTime = newTime.substring(0, lastIndex + 1) + newTime.substring(lastIndex + 2);
-        }
-
-        return newTime;
     }
 
     public static long getCurrentSecond() {

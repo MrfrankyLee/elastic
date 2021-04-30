@@ -1,6 +1,7 @@
 package com.needayeah.elastic;
 
 import com.alibaba.fastjson.JSON;
+import com.needayeah.elastic.config.es.EsIndexConfig;
 import org.elasticsearch.action.get.GetRequest;
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexRequest;
@@ -29,8 +30,7 @@ import java.util.Map;
 import java.util.logging.Handler;
 
 @SpringBootTest
-class ElasticApplicationTests {
-
+class ElasticApplicationTests implements EsIndexConfig {
 	@Autowired
 	private RestHighLevelClient restHighLevelClient;
 
@@ -62,7 +62,7 @@ class ElasticApplicationTests {
 
 	@Test
 	void searchTest() throws IOException {
-		SearchRequest request = new SearchRequest("test_index");
+		SearchRequest request = new SearchRequest("twitter");
 		SearchSourceBuilder builder = new SearchSourceBuilder();
 		builder.query(getBoolQueryBuilder());
 		builder.trackTotalHits(true);
@@ -79,4 +79,19 @@ class ElasticApplicationTests {
 		queryBuilder.filter(QueryBuilders.rangeQuery("age").gt(3));
 		return queryBuilder;
 	}
+
+    @Override
+    public String getIndexName() {
+        return "twitter";
+    }
+
+    @Override
+    public String getIndexMappingSource() {
+        return "null";
+    }
+
+    @Override
+    public String getIndexSettingSource() {
+        return "";
+    }
 }
