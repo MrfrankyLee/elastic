@@ -1,7 +1,6 @@
 package com.needayeah.elastic.common.utils;
 
 import com.google.common.collect.Lists;
-import com.needayeah.elastic.common.SnowFlake;
 import com.needayeah.elastic.entity.JdGoods;
 import com.needayeah.elastic.entity.XaHouse;
 import lombok.extern.slf4j.Slf4j;

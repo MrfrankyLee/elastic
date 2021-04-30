@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 
-import com.needayeah.elastic.enums.TransferEnum;
+import com.needayeah.elastic.common.enums.TransferEnum;
 import com.sun.istack.internal.NotNull;
 import lombok.SneakyThrows;
 import org.springframework.beans.BeanWrapper;

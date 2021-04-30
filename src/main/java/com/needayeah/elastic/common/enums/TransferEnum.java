@@ -1,4 +1,4 @@
-package com.needayeah.elastic.enums;
+package com.needayeah.elastic.common.enums;
 
 /**
  * @discription 枚举转换接口，如果在使用BeanUtils拷贝对象属性值时，需要支持枚举对象转Integer和String对象，

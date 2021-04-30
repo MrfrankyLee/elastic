@@ -1,6 +1,6 @@
 package com.needayeah.elastic.interfaces;
 
-import com.needayeah.elastic.common.Result;
+import com.needayeah.elastic.common.utils.Result;
 import com.needayeah.elastic.common.page.Page;
 import com.needayeah.elastic.interfaces.reponse.JdGoodsResponse;
 import com.needayeah.elastic.interfaces.request.JdGoodsSearchRequest;

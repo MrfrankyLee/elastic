@@ -1,4 +1,4 @@
-package com.needayeah.elastic.enums;
+package com.needayeah.elastic.common.enums;
 
 public interface DescriptionEnum {
 

@@ -1,4 +1,4 @@
-package com.needayeah.elastic.config;
+package com.needayeah.elastic.config.redis;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

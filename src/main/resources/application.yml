@@ -16,3 +16,8 @@ elasticsearch:
   restHighLevel:
     Client:
       hosts: 127.0.0.1:9200
+aliYun:
+  sms:
+    accessKeyId: 参见阿里云短信服务控制台
+    accessKeySecret: 参见阿里云短信服务控制台
+    signName: 参见阿里云短信服务控制台

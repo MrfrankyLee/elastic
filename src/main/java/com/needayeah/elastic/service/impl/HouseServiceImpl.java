@@ -1,7 +1,7 @@
 package com.needayeah.elastic.service.impl;
 
 
-import com.needayeah.elastic.common.Result;
+import com.needayeah.elastic.common.utils.Result;
 import com.needayeah.elastic.common.page.Page;
 import com.needayeah.elastic.common.page.Pair;
 import com.needayeah.elastic.common.utils.BeanUtils;

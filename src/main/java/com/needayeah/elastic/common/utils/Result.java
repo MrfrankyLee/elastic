@@ -1,7 +1,9 @@
-package com.needayeah.elastic.common;
+package com.needayeah.elastic.common.utils;
 
+import com.needayeah.elastic.common.log.Record;
 import com.needayeah.elastic.common.page.Page;
 import org.springframework.util.CollectionUtils;
+
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
@@ -41,7 +43,7 @@ public class Result<T> implements Serializable {
         Object[] var3 = args;
         int var4 = args.length;
 
-        for(int var5 = 0; var5 < var4; ++var5) {
+        for (int var5 = 0; var5 < var4; ++var5) {
             Object arg = var3[var5];
             errMsg = errMsg.replaceFirst("\\{\\}", Objects.toString(arg));
         }
@@ -78,7 +80,7 @@ public class Result<T> implements Serializable {
 
     public boolean successAndNotEmpty() {
         if (this.data instanceof Collection) {
-            return this.status == 200 && !CollectionUtils.isEmpty((Collection)this.data);
+            return this.status == 200 && !CollectionUtils.isEmpty((Collection) this.data);
         } else {
             return this.status == 200 && this.data != null;
         }

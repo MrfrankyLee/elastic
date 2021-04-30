@@ -1,4 +1,4 @@
-package com.needayeah.elastic.common;
+package com.needayeah.elastic.common.log;
 
 
 import com.google.common.collect.Lists;
