@@ -22,10 +22,10 @@ import java.util.Set;
 @Conditional(RedisConfig.EnableRedisCondition.class)
 public class RedisConfig {
 
-    @Value("${redis.nodes:212.64.17.12:6379}")
+    @Value("${redis.nodes:127.0.0.1:6379}")
     private String nodes;
 
-    @Value("${redis.password:7621024a}")
+    @Value("${redis.password:password}")
     private String passWord;
 
     @Value("${redis.connectionTimeout:5000}")

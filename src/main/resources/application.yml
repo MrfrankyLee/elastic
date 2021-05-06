@@ -21,3 +21,8 @@ aliYun:
     accessKeyId: 参见阿里云短信服务控制台
     accessKeySecret: 参见阿里云短信服务控制台
     signName: 参见阿里云短信服务控制台
+
+# redis集群搭建参考：https://blog.csdn.net/damishidai15/article/details/108976378
+redis:
+  nodes: 127.0.0.1:6379,127.0.0.1:6380
+  password: password
