@@ -1,11 +1,12 @@
 package com.needayeah.elastic.service.impl;
 
 
-import com.needayeah.elastic.common.utils.Result;
 import com.needayeah.elastic.common.page.Page;
 import com.needayeah.elastic.common.page.Pair;
 import com.needayeah.elastic.common.utils.BeanUtils;
 import com.needayeah.elastic.common.utils.HtmlParseUtil;
+import com.needayeah.elastic.common.utils.Result;
+import com.needayeah.elastic.config.queue.QueueHelper;
 import com.needayeah.elastic.domain.JdGoodsSearchDomain;
 import com.needayeah.elastic.entity.JdGoods;
 import com.needayeah.elastic.interfaces.reponse.JdGoodsResponse;
@@ -34,9 +35,17 @@ public class JdGoodsServiceImpl implements JdGoodsService {
     @Autowired
     private HtmlParseUtil htmlParseUtil;
 
+    @Autowired
+    private QueueHelper queueHelper;
+
     @Override
     public Result<String> initJDGoodsForES(String keyWord) {
         List<JdGoods> jdGoodsList = htmlParseUtil.parseJdGoods(keyWord);
+        jdGoodsList.forEach(jdGoods -> {
+            queueHelper.asyncExecute(() -> {
+                System.out.println(jdGoods);
+            });
+        });
         boolean flag = jdGoodsSearchDomain.saveOrUpdateJdGoods(jdGoodsList);
         return flag ? Result.success("搞定") : Result.error(10001, "失败");
     }
