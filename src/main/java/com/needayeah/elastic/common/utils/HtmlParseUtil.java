@@ -48,7 +48,7 @@ public class HtmlParseUtil {
                 }
                 jdGoodsList.add(JdGoods.builder()
                         .id(id)
-                        .price(Strings.isEmpty(price) ? 0.0D : Double.valueOf(price.replace("￥", "")))
+                        .price(Strings.isEmpty(price) ? 0.0D : price.contains("￥") ? Double.valueOf(price.replace("￥", "").trim()) : 0.0D)
                         .goodsName(title)
                         .shopName(shopName)
                         .img(img)

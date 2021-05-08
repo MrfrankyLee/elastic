@@ -11,3 +11,29 @@
 #  mapper-locations: classpath:mapping/*Mapper.xml
 #  type-aliases-package: com.needayeah.elastic.mapper
 
+# elasticsearch搭建
+elasticsearch:
+  restHighLevel:
+    Client:
+      hosts: xxx:9200
+
+
+# 阿里云短信
+aliYun:
+  sms:
+    accessKeyId: xxx
+    accessKeySecret: xxx
+    signName: xxx
+
+  # 阿里云存储
+  oss:
+    endpoint: https://oss-cn-shanghai.aliyuncs.com
+    accessKeyId: xxx
+    accessKeySecret: xxx
+    bucketName: xxx
+    filePath: temp/dev/
+
+# redis集群
+redis:
+  nodes: xxx:6379
+  password: xxx

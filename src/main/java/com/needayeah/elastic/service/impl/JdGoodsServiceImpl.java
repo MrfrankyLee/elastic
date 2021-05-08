@@ -6,6 +6,7 @@ import com.needayeah.elastic.common.page.Pair;
 import com.needayeah.elastic.common.utils.BeanUtils;
 import com.needayeah.elastic.common.utils.HtmlParseUtil;
 import com.needayeah.elastic.common.utils.Result;
+import com.needayeah.elastic.config.oss.OssUtil;
 import com.needayeah.elastic.config.queue.QueueHelper;
 import com.needayeah.elastic.domain.JdGoodsSearchDomain;
 import com.needayeah.elastic.entity.JdGoods;
@@ -16,7 +17,10 @@ import com.needayeah.elastic.service.JdGoodsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -38,6 +42,9 @@ public class JdGoodsServiceImpl implements JdGoodsService {
     @Autowired
     private QueueHelper queueHelper;
 
+    @Autowired
+    private OssUtil ossUtil;
+
     @Override
     public Result<String> initJDGoodsForES(String keyWord) {
         List<JdGoods> jdGoodsList = htmlParseUtil.parseJdGoods(keyWord);
@@ -58,6 +65,20 @@ public class JdGoodsServiceImpl implements JdGoodsService {
         Pair<Long, List<JdGoods>> searchPair = jdGoodsSearchDomain.search(BeanUtils.reqTransform(JdGoodsSearchBO.class, request), true);
         return Result.success(Page.of(searchPair.getLeft().intValue(),
                 BeanUtils.batchTransform(JdGoodsResponse.class, searchPair.getRight(), true, BeanUtils.TransformEnumType.VALUE_TO_ENUM)));
+    }
+
+    @Override
+    public Result<String> uploadPic(MultipartFile file) {
+        String originalFileName = file.getOriginalFilename();
+
+        InputStream fileStream = null;
+        try {
+            fileStream = file.getInputStream();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String ossUrl = ossUtil.uploadFile(originalFileName, fileStream);
+        return Result.success(ossUrl);
     }
 
 }

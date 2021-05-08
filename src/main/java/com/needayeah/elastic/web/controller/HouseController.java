@@ -1,4 +1,4 @@
-package com.needayeah.elastic.controller;
+package com.needayeah.elastic.web.controller;
 
 import com.needayeah.elastic.common.page.Page;
 import com.needayeah.elastic.common.utils.Result;

@@ -1,12 +1,14 @@
 package com.needayeah.elastic.interfaces;
 
-import com.needayeah.elastic.common.utils.Result;
 import com.needayeah.elastic.common.page.Page;
+import com.needayeah.elastic.common.utils.Result;
 import com.needayeah.elastic.interfaces.reponse.JdGoodsResponse;
+import com.needayeah.elastic.interfaces.request.InitJdGoodsRequest;
 import com.needayeah.elastic.interfaces.request.JdGoodsSearchRequest;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author lixiaole
@@ -21,7 +23,7 @@ public interface JdGoodsFace {
      * @return
      */
     @PostMapping("/initJDGoodsForES")
-    Result<String> initJDGoodsForES(@RequestParam("keyWord") String keyWord);
+    Result<String> initJDGoodsForES(@RequestBody InitJdGoodsRequest request);
 
     /**
      * 根据关键字搜索商品
@@ -30,6 +32,14 @@ public interface JdGoodsFace {
      */
     @PostMapping("/searchJdGoods")
     Result<Page<JdGoodsResponse>> searchJdGoods(@RequestBody JdGoodsSearchRequest request);
+
+    /**
+     * 上传图片
+     *
+     * @return
+     */
+    @PostMapping("/uploadPic")
+    Result<String> uploadPic(@RequestParam("file") MultipartFile file);
 
 
 }

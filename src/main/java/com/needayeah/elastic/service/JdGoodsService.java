@@ -5,6 +5,7 @@ import com.needayeah.elastic.common.utils.Result;
 import com.needayeah.elastic.common.page.Page;
 import com.needayeah.elastic.interfaces.reponse.JdGoodsResponse;
 import com.needayeah.elastic.interfaces.request.JdGoodsSearchRequest;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author lixiaole
@@ -17,4 +18,5 @@ public interface JdGoodsService {
 
     Result<Page<JdGoodsResponse>> searchJdGoods(JdGoodsSearchRequest jdGoodsSearchRequest);
 
+    Result<String> uploadPic(MultipartFile file);
 }

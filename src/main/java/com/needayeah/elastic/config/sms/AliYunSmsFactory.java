@@ -13,6 +13,7 @@ import com.aliyuncs.profile.IClientProfile;
 import com.needayeah.elastic.config.sms.enums.SmsTemplateCodeEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
@@ -55,7 +56,8 @@ public class AliYunSmsFactory {
 
     private IAcsClient iAcsClient;
 
-    public IAcsClient getIAcsClient() {
+    @Bean
+    public IAcsClient iAcsClient() {
         if (Objects.isNull(iAcsClient)) {
             IClientProfile profile = DefaultProfile.getProfile(regionId, accessKeyId, accessKeySecret);
             try {
@@ -84,7 +86,7 @@ public class AliYunSmsFactory {
         request.setTemplateParam(JSON.toJSONString(param));
         SendSmsResponse sendSmsResponse = null;
         try {
-            sendSmsResponse = getIAcsClient().getAcsResponse(request);
+            sendSmsResponse = iAcsClient.getAcsResponse(request);
         } catch (ClientException e) {
             log.error("sendSmsMessage request fail :", e);
         }
