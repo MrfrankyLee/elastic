@@ -1,6 +1,8 @@
 package com.needayeah.elastic.interfaces.request;
 
 import com.needayeah.elastic.common.page.PageRequest;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,29 +18,21 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@ApiModel("京东商品查询请求类")
 public class JdGoodsSearchRequest extends PageRequest {
-    /**
-     * id
-     */
+
+    @ApiModelProperty("商品ID")
     private String id;
 
-    /**
-     * 店铺名称
-     */
+    @ApiModelProperty("店铺名称")
     private List<String> shopNames;
 
-    /**
-     * 商品名称
-     */
+    @ApiModelProperty("商品名称")
     private String goodsName;
 
-    /**
-     * 起始价格
-     */
+    @ApiModelProperty("最小价格")
     private Double priceStart;
 
-    /**
-     * 结束时间
-     */
+    @ApiModelProperty("最大价格")
     private Double priceEnd;
 }

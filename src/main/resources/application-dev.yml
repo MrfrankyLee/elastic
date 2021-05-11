@@ -46,6 +46,8 @@ spring:
       simple:
         acknowledge-mode: manual
         default-requeue-rejected: false
+      direct:
+        acknowledge-mode: manual
     publisher-confirm-type: correlated
     template:
       mandatory: true

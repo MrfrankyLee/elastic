@@ -1,6 +1,8 @@
 package com.needayeah.elastic.interfaces.request;
 
 import com.needayeah.elastic.common.page.PageRequest;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,73 +16,48 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@ApiModel("房屋搜索实体类")
 public class XaHousesSearchRequest extends PageRequest {
 
+    @ApiModelProperty("id")
     private String id;
 
-    /**
-     * 标题
-     */
+    @ApiModelProperty("标题")
     private String title;
 
-    /**
-     * 户型
-     */
+    @ApiModelProperty("户型")
     private String unitType;
 
-    /**
-     * 面积
-     */
+    @ApiModelProperty("最小面积")
     private Double areaStart;
 
-    /**
-     * 面积
-     */
+    @ApiModelProperty("最大面积")
     private Double areaEnd;
 
-    /**
-     * 层高
-     */
+    @ApiModelProperty("层高")
     private String storeyHeight;
 
-    /**
-     * 朝向
-     */
+    @ApiModelProperty("朝向")
     private String towards;
 
-    /**
-     * 建设年限开始时间
-     */
+    @ApiModelProperty("建设年限开始时间")
     private Integer buildYearStart;
 
-    /**
-     * 建设年限结束
-     */
+    @ApiModelProperty("建设年限结束")
     private Integer buildYearEnd;
 
-    /**
-     * 地址
-     */
+    @ApiModelProperty("地址")
     private String address;
 
-    /**
-     * 总价最低价
-     */
+    @ApiModelProperty("总价最低价")
     private Double totalPriceStart;
 
-    /**
-     * 总价最高价
-     */
+    @ApiModelProperty("总价最高价")
     private Double totalPriceEnd;
 
-
-    /**
-     * 单价最低
-     */
+    @ApiModelProperty("单价最低价")
     private Double unitPriceStart;
 
-    /**
-     * 单价最高
-     */
+    @ApiModelProperty("单价最高价")
     private Double unitPriceEnd;
 }

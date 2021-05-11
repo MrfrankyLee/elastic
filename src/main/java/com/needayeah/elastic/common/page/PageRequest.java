@@ -4,10 +4,7 @@ package com.needayeah.elastic.common.page;
 import lombok.Data;
 
 /**
- * @author Feinik
- * @Discription 分页request
- * @Data 2019/3/25
- * @Version 1.0.0
+ * @author Administrator
  */
 @Data
 public class PageRequest {
@@ -36,7 +33,7 @@ public class PageRequest {
     /**
      * 记录开始位置
      */
-    protected int pageFrom;
+    protected int pageFrom = 0;
 
     public static PageRequest of(int pageNum, int pageSize) {
         PageRequest page = new PageRequest();

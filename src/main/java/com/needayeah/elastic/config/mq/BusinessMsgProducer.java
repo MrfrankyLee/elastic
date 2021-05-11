@@ -23,6 +23,16 @@ public class BusinessMsgProducer implements RabbitTemplate.ConfirmCallback {
     @PostConstruct
     private void init() {
         rabbitTemplate.setConfirmCallback(this);
+        /**
+         * 使用延时队列插件 会报消息无法路由。报错：NO_ROUTE {参考：https://github.com/rabbitmq/rabbitmq-delayed-message-exchange/issues/138 }
+         */
+        rabbitTemplate.setReturnsCallback(returned -> {
+            if (!returned.getExchange().contains("delay")) {
+                log.info("message: " + new String(returned.getMessage().getBody()) + ", return exchange: " + returned.getExchange() + ", routingKey: "
+                        + returned.getRoutingKey() + ", replyCode: " + returned.getReplyCode() + ", replyText: " + returned.getReplyText());
+            }
+
+        });
     }
 
 
@@ -44,9 +54,10 @@ public class BusinessMsgProducer implements RabbitTemplate.ConfirmCallback {
     }
 
     public void sendDelayMsg(String msg, Integer delayTime) {
-        rabbitTemplate.convertAndSend(RabbitMQConfig.DELAYED_EXCHANGE_NAME, RabbitMQConfig.DELAYED_ROUTING_KEY, msg, a ->{
+        CorrelationData correlationData = new CorrelationData(UUID.randomUUID().toString());
+        rabbitTemplate.convertAndSend(RabbitMQConfig.DELAYED_EXCHANGE_NAME, RabbitMQConfig.DELAYED_ROUTING_KEY, msg, a -> {
             a.getMessageProperties().setDelay(delayTime);
             return a;
-        });
+        }, correlationData);
     }
 }
