@@ -11,7 +11,7 @@ import redis.clients.jedis.JedisCluster;
 @Component
 public class JedisClientCluster implements JedisClient {
 
-    @Autowired
+    @Autowired(required = false)
     private JedisCluster jedisCluster;
 
     @Override

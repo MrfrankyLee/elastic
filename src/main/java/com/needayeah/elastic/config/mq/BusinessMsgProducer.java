@@ -15,19 +15,26 @@ import java.util.UUID;
  */
 @Component
 @Slf4j
-public class BusinessMsgProducer implements RabbitTemplate.ConfirmCallback {
+public class BusinessMsgProducer {
 
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
     @PostConstruct
     private void init() {
-        rabbitTemplate.setConfirmCallback(this);
+        rabbitTemplate.setConfirmCallback((correlationData, ack, cause) -> {
+            String id = correlationData != null ? correlationData.getId() : "";
+            if (ack) {
+                log.info("消息确认成功, id:{}", id);
+            } else {
+                log.error("消息未成功投递, id:{}, cause:{}", id, cause);
+            }
+        });
         /**
          * 使用延时队列插件 会报消息无法路由。报错：NO_ROUTE {参考：https://github.com/rabbitmq/rabbitmq-delayed-message-exchange/issues/138 }
          */
         rabbitTemplate.setReturnsCallback(returned -> {
-            if (!returned.getExchange().contains("delay")) {
+            if (returned.getExchange().contains("delay")) {
                 log.info("message: " + new String(returned.getMessage().getBody()) + ", return exchange: " + returned.getExchange() + ", routingKey: "
                         + returned.getRoutingKey() + ", replyCode: " + returned.getReplyCode() + ", replyText: " + returned.getReplyText());
             }
@@ -41,16 +48,6 @@ public class BusinessMsgProducer implements RabbitTemplate.ConfirmCallback {
         CorrelationData correlationData = new CorrelationData(UUID.randomUUID().toString());
         rabbitTemplate.convertSendAndReceive(exchange, "", msg, correlationData);
 
-    }
-
-    @Override
-    public void confirm(CorrelationData correlationData, boolean ack, String cause) {
-        String id = correlationData != null ? correlationData.getId() : "";
-        if (ack) {
-            log.info("消息确认成功, id:{}", id);
-        } else {
-            log.error("消息未成功投递, id:{}, cause:{}", id, ack);
-        }
     }
 
     public void sendDelayMsg(String msg, Integer delayTime) {

@@ -5,10 +5,10 @@ import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.impl.client.BasicCredentialsProvider;
+import org.apache.logging.log4j.util.Strings;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestClientBuilder;
 import org.elasticsearch.client.RestHighLevelClient;
-import org.elasticsearch.common.Strings;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Condition;
@@ -106,8 +106,10 @@ public class EsConfiguration {
     public static class EnableEsCondition implements Condition {
         @Override
         public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
-            // 可加入配置中心 动态开闭ES
-            return true;
+            // 后续更改为从配置中心获取ES开关
+            //String enable = ConfigService.getAppConfig().getProperty("elasticsearch.restHighLevel.Client.hosts", "");
+            String enable = Strings.EMPTY;
+            return Strings.isEmpty(enable);
         }
     }
 

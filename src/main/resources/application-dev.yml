@@ -38,6 +38,12 @@ redis:
 
 
 spring:
+  datasource:
+    username: root
+    password: 123456
+    url: jdbc:mysql://127.0.0.1:3306/sys?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
   rabbitmq:
     addresses: 127.0.0.1:5672, 127.0.0.1:5673, 127.0.0.1:5674
     username: guest
@@ -51,3 +57,22 @@ spring:
     publisher-confirm-type: correlated
     template:
       mandatory: true
+
+xxl:
+  job:
+    admin:
+      ### xxl-job admin address list, such as "http://address" or "http://address01,http://address02"
+      addresses: http://127.0.0.1:8080/xxl-job-admin
+    ### xxl-job, access token
+    accessToken:
+    executor:
+      appname: elastic
+      ### xxl-job executor registry-address: default use address to registry , otherwise use ip:port if address is null
+      address:
+      ### xxl-job executor server-info
+      ip:
+      port: 9998
+      ### xxl-job executor log-path
+      logpath: /data/applogs/xxl-job/jobhandler
+      ### xxl-job executor log-retention-days
+      logretentiondays: 30

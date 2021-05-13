@@ -1,5 +1,6 @@
 package com.needayeah.elastic.config.es;
 
+import org.apache.logging.log4j.util.Strings;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.client.indices.CreateIndexRequest;
@@ -51,8 +52,10 @@ public class EsIndexInit {
     public static class Load implements Condition {
         @Override
         public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
-            // 可动态配置
-            return true;
+            // 后续更改为从配置中心获取 ES 开关
+            //String enable = ConfigService.getAppConfig().getProperty("xxl.job.admin.addresses", "");
+            String enable = Strings.EMPTY;
+            return Strings.isEmpty(enable);
         }
     }
 }

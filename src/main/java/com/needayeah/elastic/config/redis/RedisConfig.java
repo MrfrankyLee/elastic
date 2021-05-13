@@ -1,6 +1,7 @@
 package com.needayeah.elastic.config.redis;
 
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Condition;
@@ -22,10 +23,10 @@ import java.util.Set;
 @Conditional(RedisConfig.EnableRedisCondition.class)
 public class RedisConfig {
 
-    @Value("${redis.nodes:127.0.0.1:6379}")
+    @Value("${redis.nodes:}")
     private String nodes;
 
-    @Value("${redis.password:password}")
+    @Value("${redis.password:}")
     private String passWord;
 
     @Value("${redis.connectionTimeout:5000}")
@@ -73,7 +74,9 @@ public class RedisConfig {
         @Override
         public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
             // 可加入配置中心 动态开闭redis
-            return true;
+            //String enable = ConfigService.getAppConfig().getProperty("redis.nodes", "");
+            String enable = Strings.EMPTY;
+            return Strings.isEmpty(enable);
         }
     }
 }
