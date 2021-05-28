@@ -34,7 +34,7 @@ public class BusinessMsgProducer {
          * 使用延时队列插件 会报消息无法路由。报错：NO_ROUTE {参考：https://github.com/rabbitmq/rabbitmq-delayed-message-exchange/issues/138 }
          */
         rabbitTemplate.setReturnsCallback(returned -> {
-            if (returned.getExchange().contains("delay")) {
+            if (!returned.getExchange().contains("delay")) {
                 log.info("message: " + new String(returned.getMessage().getBody()) + ", return exchange: " + returned.getExchange() + ", routingKey: "
                         + returned.getRoutingKey() + ", replyCode: " + returned.getReplyCode() + ", replyText: " + returned.getReplyText());
             }

@@ -8,7 +8,7 @@ package com.needayeah.elastic.config.sms.enums;
  */
 public enum SmsTemplateCodeEnum {
 
-    TEMPLATE_CODE_ENUM("temp_code", "短信模板编码说明");
+    TEMPLATE_CODE_ENUM("SMS_176914249", "短信模板编码说明");
 
     /**
      * 模板值
