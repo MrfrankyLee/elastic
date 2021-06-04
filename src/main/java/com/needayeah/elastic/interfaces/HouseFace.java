@@ -31,4 +31,12 @@ public interface HouseFace {
     @PostMapping("/searchXaHouse")
     Result<Page<XaHouse>> searchXaHouse(@RequestBody XaHousesSearchRequest request);
 
+    /**
+     * 获取房屋详情
+     *
+     * @return
+     */
+    @PostMapping("/getHouseDetails")
+    Result<XaHouse> getHouseDetails(@RequestBody XaHousesSearchRequest request);
+
 }

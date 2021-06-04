@@ -2,6 +2,7 @@ package com.needayeah.elastic.config.redis;
 
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.apache.logging.log4j.util.Strings;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Condition;
@@ -9,6 +10,9 @@ import org.springframework.context.annotation.ConditionContext;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.type.AnnotatedTypeMetadata;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.JedisCluster;
 
@@ -23,10 +27,10 @@ import java.util.Set;
 @Conditional(RedisConfig.EnableRedisCondition.class)
 public class RedisConfig {
 
-    @Value("${redis.nodes:}")
+    @Value("${spring.redis.cluster.nodes:}")
     private String nodes;
 
-    @Value("${redis.password:}")
+    @Value("${spring.redis.password:}")
     private String passWord;
 
     @Value("${redis.connectionTimeout:5000}")
@@ -69,6 +73,19 @@ public class RedisConfig {
         return jedisCluster;
     }
 
+    @Autowired
+    private RedisConnectionFactory factory;
+
+    @Bean
+    public RedisTemplate<String, Object> redisTemplate() {
+        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
+        redisTemplate.setHashValueSerializer(new StringRedisSerializer());
+        redisTemplate.setValueSerializer(new StringRedisSerializer());
+        redisTemplate.setConnectionFactory(factory);
+        return redisTemplate;
+    }
 
     public static class EnableRedisCondition implements Condition {
         @Override

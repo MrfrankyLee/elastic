@@ -28,7 +28,11 @@ public interface JedisClient {
 
     String rpop(String key);
 
+    Long delete(String key);
+
     Long hincrBy(String key, String field, long value);
 
+    Boolean setBit(String key, long offset, boolean value);
 
+    Boolean getBit(String key, long offset);
 }

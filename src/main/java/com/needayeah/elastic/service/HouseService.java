@@ -17,4 +17,6 @@ public interface HouseService {
     Result<String> initXaHouseForES(Integer count);
 
     Result<Page<XaHouse>> searchXaHouse(XaHousesSearchRequest request);
+
+    Result<XaHouse> getHouseDetails(XaHousesSearchRequest request);
 }

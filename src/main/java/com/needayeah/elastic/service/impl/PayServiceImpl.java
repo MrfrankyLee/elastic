@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 
 /**
+ * 策略模式接口
+ *
  * @author lixiaole
  * @date 2021/5/18
  */

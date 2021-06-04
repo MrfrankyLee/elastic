@@ -39,4 +39,9 @@ public class HouseController implements HouseFace {
     public Result<Page<XaHouse>> searchXaHouse(@RequestBody XaHousesSearchRequest request) {
         return houseService.searchXaHouse(request);
     }
+
+    @Override
+    public Result<XaHouse> getHouseDetails(@RequestBody XaHousesSearchRequest request) {
+        return houseService.getHouseDetails(request);
+    }
 }

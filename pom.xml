@@ -91,6 +91,11 @@
             <version>2.9.0</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+
         <!-- 数据库操作依赖包 -->
         <dependency>
             <groupId>tk.mybatis</groupId>

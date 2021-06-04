@@ -5,6 +5,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 /**
  * @author lixiaole
  * @date 2021-02-03
@@ -13,11 +16,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Table(name = "jd_goods")
 public class JdGoods {
 
     /**
      * id
      */
+    @Id
     private String id;
 
     /**
