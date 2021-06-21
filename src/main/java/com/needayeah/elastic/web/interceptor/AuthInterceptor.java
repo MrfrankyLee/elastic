@@ -1,5 +1,6 @@
 package com.needayeah.elastic.web.interceptor;
 
+import com.needayeah.elastic.common.utils.HeaderThreadLocal;
 import com.needayeah.elastic.common.utils.Result;
 import com.needayeah.elastic.common.utils.SendResponseUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -40,8 +41,13 @@ public class AuthInterceptor implements HandlerInterceptor {
             }
         }
 
+        HeaderThreadLocal threadLocal = HeaderThreadLocal.getThreadInstance();
         String token = "1231531315313";//request.getHeader("token");
-        String eId = "1521553153";//request.getHeader("eId");
+        String eId = "employeeId1215315315";//request.getHeader("eId");
+        /*if (Thread.currentThread().getId() % 2 == 0) {
+            threadLocal.setToken(token);
+            threadLocal.setEmployeeId(String.valueOf(Thread.currentThread().getId()));
+        }*/
         if (!StringUtils.hasLength(token) || !StringUtils.hasLength(eId)) {
             log.error("token or employeeId is null");
             SendResponseUtil.sendResponse(response, new Result(4000, "当前账号未登录，请重新登录。如非本人操作，请及时修改密码。"));

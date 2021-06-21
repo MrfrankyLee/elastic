@@ -1,5 +1,7 @@
 package com.needayeah.elastic.web.controller;
 
+import com.needayeah.elastic.common.annotation.DataPrivilegeInjection;
+import com.needayeah.elastic.common.annotation.PrivilegeFieldEnum;
 import com.needayeah.elastic.common.page.Page;
 import com.needayeah.elastic.common.utils.Result;
 import com.needayeah.elastic.entity.XaHouse;
@@ -41,6 +43,7 @@ public class HouseController implements HouseFace {
     }
 
     @Override
+    @DataPrivilegeInjection(fields = {PrivilegeFieldEnum.keyWord})
     public Result<XaHouse> getHouseDetails(@RequestBody XaHousesSearchRequest request) {
         return houseService.getHouseDetails(request);
     }

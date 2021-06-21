@@ -122,18 +122,16 @@ public class AliPayService implements IPayment {
         alipayRequest.setBizContent(JSON.toJSONString(alipayBean));
         String form = Strings.EMPTY;
         try {
-            // 调用SDK生成表单
+            /*// 调用SDK生成表单
             HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
-            response.reset();
+            response.reset();*/
             form = alipayClient.pageExecute(alipayRequest).getBody();
-            response.setContentType("text/html;charset=" + AlipayConfig.CHARSET);
+           /* response.setContentType("text/html;charset=" + AlipayConfig.CHARSET);
             response.getOutputStream().write(form.getBytes());
             response.getOutputStream().flush();
-            response.getOutputStream().close();
+            response.getOutputStream().close();*/
         } catch (AlipayApiException e) {
             // TODO Auto-generated catch block
-        } catch (IOException e) {
-            e.printStackTrace();
         }
         return new PayResultResponse(form);
     }
