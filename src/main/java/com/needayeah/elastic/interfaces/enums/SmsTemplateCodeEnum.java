@@ -1,4 +1,4 @@
-package com.needayeah.elastic.config.sms.enums;
+package com.needayeah.elastic.interfaces.enums;
 
 /**
  * 短信模板

@@ -10,13 +10,14 @@ import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.http.MethodType;
 import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.profile.IClientProfile;
-import com.needayeah.elastic.config.sms.enums.SmsTemplateCodeEnum;
+import com.needayeah.elastic.common.utils.Result;
+import com.needayeah.elastic.interfaces.request.SendSmsMessageRequest;
+import com.needayeah.elastic.service.SmsSenderService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
-import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -24,10 +25,9 @@ import java.util.Objects;
  * @desc 阿里云短信发送平台
  * @date 2021/4/21
  */
-
-@Component
 @Slf4j
-public class AliYunSmsFactory {
+@Component("ALI_YUN_SMS")
+public class AliYunSmsMessage implements SmsSenderService {
     /**
      * 阿里云短信服务accessKey 参考 阿里云短信控制
      */
@@ -70,32 +70,27 @@ public class AliYunSmsFactory {
         return iAcsClient;
     }
 
-    /**
-     * 短信发送
-     *
-     * @param phoneNumber      接收手机号
-     * @param templateCodeEnum 短信模板枚举
-     * @param param            短信内容中需替换数据参数
-     */
-    public void sendSmsMessage(String phoneNumber, SmsTemplateCodeEnum templateCodeEnum, Map<String, String> param) {
-        SendSmsRequest request = new SendSmsRequest();
-        request.setSysMethod(MethodType.POST);
-        request.setSignName(signName);
-        request.setPhoneNumbers(phoneNumber);
-        request.setTemplateCode(templateCodeEnum.getValue());
-        request.setTemplateParam(JSON.toJSONString(param));
+    @Override
+    public Result<Boolean> sendSmsMessage(SendSmsMessageRequest request) {
+        SendSmsRequest smsRequest = new SendSmsRequest();
+        smsRequest.setSysMethod(MethodType.POST);
+        smsRequest.setSignName(signName);
+        smsRequest.setPhoneNumbers(request.getPhoneNumber());
+        smsRequest.setTemplateCode(request.getTemplateCodeEnum().getValue());
+        smsRequest.setTemplateParam(JSON.toJSONString(request.getParam()));
         SendSmsResponse sendSmsResponse = null;
         try {
-            sendSmsResponse = iAcsClient.getAcsResponse(request);
+            sendSmsResponse = iAcsClient.getAcsResponse(smsRequest);
         } catch (ClientException e) {
             log.error("sendSmsMessage request fail :", e);
         }
         if (Objects.nonNull(sendSmsResponse) && RESPONSE_OK.equalsIgnoreCase(sendSmsResponse.getCode())) {
-            log.info("send sms message success,receiver phone number :{}, sendSmsResponse:{}", phoneNumber, JSON.toJSONString(sendSmsResponse));
+            log.info("send sms message success,receiver phone number :{}, sendSmsResponse:{}", request.getPhoneNumber(), JSON.toJSONString(sendSmsResponse));
+            return Result.success(Boolean.TRUE);
         } else {
-            log.error("send sms message fail, receiver phone number :{}, sendSmsResponse:{}", phoneNumber, JSON.toJSONString(sendSmsResponse));
+            log.error("send sms message fail, receiver phone number :{}, sendSmsResponse:{}", request.getPhoneNumber(), JSON.toJSONString(sendSmsResponse));
         }
+        return Result.success(Boolean.FALSE);
     }
-
 }
 
