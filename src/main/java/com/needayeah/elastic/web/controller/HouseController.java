@@ -2,6 +2,7 @@ package com.needayeah.elastic.web.controller;
 
 import com.needayeah.elastic.common.annotation.DataPrivilegeInjection;
 import com.needayeah.elastic.common.annotation.PrivilegeFieldEnum;
+import com.needayeah.elastic.common.annotation.RateLimiter;
 import com.needayeah.elastic.common.page.Page;
 import com.needayeah.elastic.common.utils.Result;
 import com.needayeah.elastic.entity.XaHouse;
@@ -32,12 +33,13 @@ public class HouseController implements HouseFace {
 
     @Override
     @ApiOperation("初始化房屋到ES")
-    public Result<String> initXaHouseForES(@ApiParam(value = "页数(每页100条)" ,name = "count") @RequestParam("count") Integer count) {
+    public Result<String> initXaHouseForES(@ApiParam(value = "页数(每页100条)", name = "count") @RequestParam("count") Integer count) {
         return houseService.initXaHouseForES(count);
     }
 
     @Override
     @ApiOperation("搜索房屋")
+    @RateLimiter(max = 5)
     public Result<Page<XaHouse>> searchXaHouse(@RequestBody XaHousesSearchRequest request) {
         return houseService.searchXaHouse(request);
     }
