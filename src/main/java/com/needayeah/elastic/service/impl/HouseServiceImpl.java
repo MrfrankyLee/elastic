@@ -70,7 +70,6 @@ public class HouseServiceImpl implements HouseService {
         }
         Pair<Long, List<XaHouse>> searchPair = xaHouseEsDomain.search(BeanUtils.reqTransform(XaHouseSearchBO.class, request), true);
         redisBloomFilter.addList(bloomFilterHelper, "HouseFilter", searchPair.getRight().stream().map(x -> x.getId()).collect(Collectors.toList()));
-        redisTemplate.opsForValue().set("longValue", String.valueOf(10));
         return Result.success(Page.of(searchPair.getLeft().intValue(), searchPair.getRight()));
     }
 

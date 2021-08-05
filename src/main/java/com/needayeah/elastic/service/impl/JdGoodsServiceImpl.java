@@ -16,6 +16,7 @@ import com.needayeah.elastic.model.JdGoodsSearchBO;
 import com.needayeah.elastic.service.JdGoodsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -58,6 +59,7 @@ public class JdGoodsServiceImpl implements JdGoodsService {
     }
 
     @Override
+    @CachePut(value = "Result", key = "#request.id")
     public Result<Page<JdGoodsResponse>> searchJdGoods(JdGoodsSearchRequest request) {
         if (request.getPageSize() > SEARCH_TRADE_ORDER_MAX_NUM) {
             return Result.error(4000, "查询数量超限");

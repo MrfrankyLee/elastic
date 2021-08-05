@@ -152,15 +152,48 @@ public class RabbitMQConfig {
         return BindingBuilder.bind(queue).to(exchange).with(DEAD_LETTER_QUEUEB_ROUTING_KEY);
     }
 
+    @Bean("testExchange")
+    public FanoutExchange testExchange() {
+        return new FanoutExchange("testExchange", true, false);
+    }
+
+    @Bean("testQueue")
+    public Queue testQueue() {
+        Map<String, Object> args = new HashMap<>(2);
+        //x-dead-letter-exchange    这里声明当前队列绑定的死信交换机
+        args.put("x-dead-letter-exchange", DEAD_LETTER_EXCHANGE);
+        //x-dead-letter-routing-key  这里声明当前队列的死信路由key
+        args.put("x-dead-letter-routing-key", DEAD_LETTER_QUEUEA_ROUTING_KEY);
+        return QueueBuilder.durable("testQueue").withArguments(args).build();
+    }
+
+    @Bean("testBinding")
+    public Binding testBinding(@Qualifier("testQueue") Queue queue,
+                               @Qualifier("testExchange") FanoutExchange exchange) {
+        return BindingBuilder.bind(queue).to(exchange);
+    }
+
+
+    /** 以下是基于延时队列插件实现延时消息 */
     public static final String DELAYED_QUEUE_NAME = "delay.queue.demo.delay.queue";
     public static final String DELAYED_EXCHANGE_NAME = "delay.queue.demo.delay.exchange";
     public static final String DELAYED_ROUTING_KEY = "delay.queue.demo.delay.routingkey";
 
+    /**
+     * 声明一个延时消息的队列
+     *
+     * @return
+     */
     @Bean
     public Queue immediateQueue() {
         return new Queue(DELAYED_QUEUE_NAME);
     }
 
+    /**
+     * 声明一个延时消息的交换机
+     *
+     * @return
+     */
     @Bean
     public CustomExchange customExchange() {
         Map<String, Object> args = new HashMap<>();

@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 
 /**
  * @author lixiaole
@@ -17,7 +18,7 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @Builder
 @Table(name = "jd_goods")
-public class JdGoods {
+public class JdGoods implements Serializable {
 
     /**
      * id

@@ -29,11 +29,19 @@ public class BusinessController {
         producer.sendMsg(msg);
     }
 
-    @GetMapping("/delayMsg2")
-    @ApiOperation(value = "发送延时消息")
-    public void delayMsg2(@ApiParam(value = "消息内容", name = "msg", required = true) String msg,
-                          @ApiParam(value = "延长时间", name = "delayTime", required = true) Integer delayTime) {
+    @GetMapping("/sendDelayFromMsgTtl")
+    @ApiOperation(value = "发送普通消息")
+    public void sendDelayFromMsgTtl(@ApiParam(value = "消息内容", name = "msg", required = true) String msg,
+                        @ApiParam(value = "过期时间", name = "expiration", required = true) String expiration) {
+        producer.sendDelayFromMsgTtl(msg, expiration);
+    }
+
+
+    @GetMapping("/sendDelayMsgFromPlugin")
+    @ApiOperation(value = "通过插件发送延时消息")
+    public void sendDelayMsgFromPlugin(@ApiParam(value = "消息内容", name = "msg", required = true) String msg,
+                                       @ApiParam(value = "延长时间", name = "delayTime", required = true) Integer delayTime) {
         log.info("当前时间：{},收到请求，msg:{},delayTime:{}", new Date(), msg, delayTime);
-        producer.sendDelayMsg(msg, delayTime);
+        producer.sendDelayMsgFromPlugin(msg, delayTime);
     }
 }

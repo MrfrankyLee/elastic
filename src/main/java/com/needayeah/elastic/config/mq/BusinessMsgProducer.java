@@ -1,6 +1,8 @@
 package com.needayeah.elastic.config.mq;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.rabbit.connection.CorrelationData;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +27,7 @@ public class BusinessMsgProducer {
         rabbitTemplate.setConfirmCallback((correlationData, ack, cause) -> {
             String id = correlationData != null ? correlationData.getId() : "";
             if (ack) {
-                log.info("消息确认成功, id:{}", id);
+                //log.info("消息确认成功, id:{}", id);
             } else {
                 log.error("消息未成功投递, id:{}, cause:{}", id, cause);
             }
@@ -44,13 +46,29 @@ public class BusinessMsgProducer {
 
 
     public void sendMsg(String msg) {
+        MessageProperties messageProperties = new MessageProperties();
+        messageProperties.setMessageId(UUID.randomUUID().toString());
+        messageProperties.setContentType("text/plain");
+        messageProperties.setContentEncoding("utf-8");
+        Message message = new Message(msg.getBytes(), messageProperties);
         String exchange = RabbitMQConfig.BUSINESS_EXCHANGE_NAME;
         CorrelationData correlationData = new CorrelationData(UUID.randomUUID().toString());
-        rabbitTemplate.convertSendAndReceive(exchange, "", msg, correlationData);
-
+        rabbitTemplate.convertSendAndReceive(exchange, "", message, correlationData);
     }
 
-    public void sendDelayMsg(String msg, Integer delayTime) {
+    public void sendDelayFromMsgTtl(String msg, String expiration) {
+        MessageProperties messageProperties = new MessageProperties();
+        messageProperties.setMessageId(UUID.randomUUID().toString());
+        messageProperties.setContentType("text/plain");
+        messageProperties.setContentEncoding("utf-8");
+        messageProperties.setExpiration(expiration);
+        Message message = new Message(msg.getBytes(), messageProperties);
+        String exchange = "testExchange";
+        CorrelationData correlationData = new CorrelationData(UUID.randomUUID().toString());
+        rabbitTemplate.convertSendAndReceive(exchange, "", message, correlationData);
+    }
+
+    public void sendDelayMsgFromPlugin(String msg, Integer delayTime) {
         CorrelationData correlationData = new CorrelationData(UUID.randomUUID().toString());
         rabbitTemplate.convertAndSend(RabbitMQConfig.DELAYED_EXCHANGE_NAME, RabbitMQConfig.DELAYED_ROUTING_KEY, msg, a -> {
             a.getMessageProperties().setDelay(delayTime);
