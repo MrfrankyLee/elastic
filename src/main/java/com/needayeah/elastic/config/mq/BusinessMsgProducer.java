@@ -24,6 +24,10 @@ public class BusinessMsgProducer {
 
     @PostConstruct
     private void init() {
+
+        /**
+         * 如果消息和队列时可持久化的,那么确认回调会在消息写入磁盘后发出
+         */
         rabbitTemplate.setConfirmCallback((correlationData, ack, cause) -> {
             String id = correlationData != null ? correlationData.getId() : "";
             if (ack) {
@@ -33,6 +37,10 @@ public class BusinessMsgProducer {
             }
         });
         /**
+         * 当mandatory标志位设置为true时，如果exchange根据自身类型和消息routingKey无法找到一个合适的queue存储消息，
+         * 那么broker会调用basic.return方法将消息返还给生产者;当mandatory设置为false时，出现上述情况broker会直接将消息丢弃;
+         * 通俗的讲，mandatory标志告诉broker代理服务器至少将消息route到一个队列中，否则就将消息return给发送者;
+         *
          * 使用延时队列插件 会报消息无法路由。报错：NO_ROUTE {参考：https://github.com/rabbitmq/rabbitmq-delayed-message-exchange/issues/138 }
          */
         rabbitTemplate.setReturnsCallback(returned -> {

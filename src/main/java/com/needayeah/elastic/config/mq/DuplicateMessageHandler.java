@@ -27,11 +27,22 @@ public class DuplicateMessageHandler {
      */
     private long dedupRecordReserveMinutes = 60 * 24;
 
+    /**
+     * 当前消息的最大重试消费次数
+     */
+    private static final long MAX_CONSUME_COUNT = 3;
+
     @Autowired
     private RedisPersist redisPersist;
 
     public boolean handleMsgInner(Message message, IConsumeService consumeService) {
         String messageId = message.getMessageProperties().getMessageId();
+        if (redisPersist.increment(messageId) > MAX_CONSUME_COUNT) {
+            // 已经消费失败超过最大消费次数了(后面再重试大概率也是失败)那就默认其成功了吧  后面进行人工干预
+            // TODO  进行人工干预
+            log.warn("consume this message " + MAX_CONSUME_COUNT + " times , but all failed!");
+            return true;
+        }
         Boolean shouldConsume = redisPersist.setConsumingIfNx(messageId, dedupProcessingExpireMilliSeconds);
         // 没有消费过
         if (Objects.nonNull(shouldConsume) && shouldConsume) {

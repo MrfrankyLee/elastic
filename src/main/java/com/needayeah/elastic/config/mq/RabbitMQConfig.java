@@ -157,6 +157,14 @@ public class RabbitMQConfig {
         return new FanoutExchange("testExchange", true, false);
     }
 
+    /**
+     * 消息变成死信的三种情况：
+     * 消息被拒绝（basic.reject/ basic.nack）并且requeue=false
+     * 消息TTL过期（参考：RabbitMQ之TTL（Time-To-Live 过期时间））
+     * 队列达到最大长度
+     *
+     * @return
+     */
     @Bean("testQueue")
     public Queue testQueue() {
         Map<String, Object> args = new HashMap<>(2);

@@ -24,7 +24,7 @@ public class BusinessMsgConsumer {
     @RabbitListener(queues = RabbitMQConfig.BUSINESS_QUEUEA_NAME)
     public void receiveA(Message message, Channel channel) throws IOException {
         log.info("收到业务消息A：{}", new String(message.getBody()) + "-----" + message.getMessageProperties().getMessageId());
-        boolean hasConsumeFail = duplicateMessageHandler.handleMsgInner(message, msg -> true);
+        boolean hasConsumeFail = duplicateMessageHandler.handleMsgInner(message, msg -> false);
         if (hasConsumeFail) {
             //消费成功
             log.info("consume [{}] msg all successfully", message.getMessageProperties().getMessageId());
@@ -36,7 +36,7 @@ public class BusinessMsgConsumer {
         }
     }
 
-    @RabbitListener(queues = RabbitMQConfig.BUSINESS_QUEUEB_NAME)
+    //@RabbitListener(queues = RabbitMQConfig.BUSINESS_QUEUEB_NAME)
     public void receiveB(Message message, Channel channel) throws IOException {
         log.info("收到业务消息B：" + new String(message.getBody()) + " ------messageId:" + message.getMessageProperties().getMessageId());
         boolean hasConsumeFail = duplicateMessageHandler.handleMsgInner(message, msg -> true);
