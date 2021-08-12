@@ -27,6 +27,7 @@ public class BusinessMsgProducer {
 
         /**
          * 如果消息和队列时可持久化的,那么确认回调会在消息写入磁盘后发出
+         * 当前message确认的前提是该message被全部镜像队列所接受了
          */
         rabbitTemplate.setConfirmCallback((correlationData, ack, cause) -> {
             String id = correlationData != null ? correlationData.getId() : "";
@@ -48,7 +49,6 @@ public class BusinessMsgProducer {
                 log.info("message: " + new String(returned.getMessage().getBody()) + ", return exchange: " + returned.getExchange() + ", routingKey: "
                         + returned.getRoutingKey() + ", replyCode: " + returned.getReplyCode() + ", replyText: " + returned.getReplyText());
             }
-
         });
     }
 
