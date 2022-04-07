@@ -28,10 +28,12 @@ import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ObjectUtils;
 
 import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author lixiaole
@@ -130,6 +132,12 @@ public class XaHouseEsDomain implements EsIndexConfig {
 
     private BoolQueryBuilder getBoolQueryBuilder(XaHouseSearchBO condition) {
         BoolQueryBuilder queryBuilder = new BoolQueryBuilder();
+        if (!Strings.isEmpty(condition.getId())) {
+            queryBuilder.must(QueryBuilders.termQuery(BeanUtils.getBeanFieldName(XaHouse::getId),condition.getId()));
+        }
+        if (!ObjectUtils.isEmpty(condition.getIds())) {
+            queryBuilder.must(QueryBuilders.termsQuery(BeanUtils.getBeanFieldName(XaHouse::getId),condition.getIds()));
+        }
         if (!Strings.isEmpty(condition.getTitle())) {
             queryBuilder.must(QueryBuilders.wildcardQuery(BeanUtils.getBeanFieldName(XaHouse::getTitle) + ".keyword", "*" + condition.getTitle() + "*"));
         }

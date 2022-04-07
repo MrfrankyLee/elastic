@@ -25,6 +25,8 @@ public class XaHouseSearchBO {
 
     private String id;
 
+    private List<String> ids;
+
     /**
      * 标题
      */

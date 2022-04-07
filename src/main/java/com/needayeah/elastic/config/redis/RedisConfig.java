@@ -2,6 +2,9 @@ package com.needayeah.elastic.config.redis;
 
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.apache.logging.log4j.util.Strings;
+import org.redisson.Redisson;
+import org.redisson.api.RedissonClient;
+import org.redisson.config.Config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
@@ -26,6 +29,7 @@ import org.springframework.scripting.support.ResourceScriptSource;
 import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.JedisCluster;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -94,7 +98,7 @@ public class RedisConfig {
     }
 
     @Autowired
-    private RedisConnectionFactory factory;
+    private RedisConnectionFactory redisConnectionFactory;
 
     @Bean
     public RedisTemplate<String, Object> redisTemplate() {
@@ -103,20 +107,25 @@ public class RedisConfig {
         redisTemplate.setHashKeySerializer(new StringRedisSerializer());
         redisTemplate.setHashValueSerializer(new StringRedisSerializer());
         redisTemplate.setValueSerializer(new StringRedisSerializer());
-        redisTemplate.setConnectionFactory(factory);
+        redisTemplate.setConnectionFactory(redisConnectionFactory);
         return redisTemplate;
+    }
+
+    @Bean
+    public RedissonClient redissonClient() throws IOException {
+        return Redisson.create(Config.fromYAML(new ClassPathResource("redisson.yml").getInputStream()));
     }
 
     /**
      * 配置使用注解的时候缓存配置，默认是序列化反序列化的形式，加上此配置则为 json 形式
      */
     @Bean
-    public CacheManager cacheManager(RedisConnectionFactory factory) {
+    public CacheManager cacheManager(RedisConnectionFactory redisConnectionFactory) {
         // 配置序列化
         RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig();
         RedisCacheConfiguration redisCacheConfiguration = config.serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer())).serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer()));
 
-        return RedisCacheManager.builder(factory).cacheDefaults(redisCacheConfiguration).build();
+        return RedisCacheManager.builder(redisConnectionFactory).cacheDefaults(redisCacheConfiguration).build();
     }
 
     public static class EnableRedisCondition implements Condition {

@@ -11,8 +11,9 @@ import com.aliyuncs.http.MethodType;
 import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.profile.IClientProfile;
 import com.needayeah.elastic.common.utils.Result;
+import com.needayeah.elastic.domain.SmsSenderInvokeStrategy;
+import com.needayeah.elastic.interfaces.enums.SmsSenderEnum;
 import com.needayeah.elastic.interfaces.request.SendSmsMessageRequest;
-import com.needayeah.elastic.service.SmsSenderService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -26,8 +27,8 @@ import java.util.Objects;
  * @date 2021/4/21
  */
 @Slf4j
-@Component("ALI_YUN_SMS")
-public class AliYunSmsMessage implements SmsSenderService {
+@Component
+public class AliYunSmsMessage implements SmsSenderInvokeStrategy {
     /**
      * 阿里云短信服务accessKey 参考 阿里云短信控制
      */
@@ -56,6 +57,11 @@ public class AliYunSmsMessage implements SmsSenderService {
 
     private IAcsClient iAcsClient;
 
+    @Override
+    public SmsSenderEnum[] getSender() {
+        return new SmsSenderEnum[]{SmsSenderEnum.ALI_YUN_SMS};
+    }
+
     @Bean
     public IAcsClient iAcsClient() {
         if (Objects.isNull(iAcsClient)) {
@@ -82,7 +88,7 @@ public class AliYunSmsMessage implements SmsSenderService {
         try {
             sendSmsResponse = iAcsClient.getAcsResponse(smsRequest);
         } catch (ClientException e) {
-            log.error("sendSmsMessage request fail :", e);
+            log.error("sendSmsMessage request fail :", e.getMessage());
         }
         if (Objects.nonNull(sendSmsResponse) && RESPONSE_OK.equalsIgnoreCase(sendSmsResponse.getCode())) {
             log.info("send sms message success,receiver phone number :{}, sendSmsResponse:{}", request.getPhoneNumber(), JSON.toJSONString(sendSmsResponse));

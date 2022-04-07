@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 
 /**
  * @author lixiaole
@@ -21,6 +23,9 @@ public class XaHousesSearchRequest extends PageRequest {
 
     @ApiModelProperty("id")
     private String id;
+
+    @ApiModelProperty("ids")
+    private List<String> ids;
 
     @ApiModelProperty("标题")
     private String title;

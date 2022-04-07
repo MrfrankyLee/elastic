@@ -1,6 +1,7 @@
-package com.needayeah.elastic.service;
+package com.needayeah.elastic.domain;
 
 import com.needayeah.elastic.common.utils.Result;
+import com.needayeah.elastic.interfaces.enums.SmsSenderEnum;
 import com.needayeah.elastic.interfaces.request.SendSmsMessageRequest;
 
 /**
@@ -8,7 +9,14 @@ import com.needayeah.elastic.interfaces.request.SendSmsMessageRequest;
  * @date 2021/7/21
  * @desc 短信发送方发送接口
  */
-public interface SmsSenderService {
+public interface SmsSenderInvokeStrategy {
+
+    /**
+     * 获取支持的发送方
+     *
+     * @return
+     */
+    SmsSenderEnum[] getSender();
 
     /**
      * 发送短信消息

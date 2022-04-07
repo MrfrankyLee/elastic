@@ -18,6 +18,8 @@ import com.needayeah.elastic.interfaces.request.XaHousesSearchRequest;
 import com.needayeah.elastic.model.XaHouseSearchBO;
 import com.needayeah.elastic.service.HouseService;
 import lombok.extern.slf4j.Slf4j;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.geo.Distance;
 import org.springframework.data.geo.GeoResults;
@@ -54,6 +56,9 @@ public class HouseServiceImpl implements HouseService {
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
 
+    @Autowired
+    private RedissonClient redissonClient;
+
     private static BloomFilterHelper<String> bloomFilterHelper = new BloomFilterHelper<>(100000);
 
     @Override
@@ -70,35 +75,34 @@ public class HouseServiceImpl implements HouseService {
         }
         Pair<Long, List<XaHouse>> searchPair = xaHouseEsDomain.search(BeanUtils.reqTransform(XaHouseSearchBO.class, request), true);
         redisBloomFilter.addList(bloomFilterHelper, "HouseFilter", searchPair.getRight().stream().map(x -> x.getId()).collect(Collectors.toList()));
+
+        List<String> keys = searchPair.getRight().stream().map(XaHouse::getId).collect(Collectors.toList());
+        redisTemplate.delete(keys);
+
+
         return Result.success(Page.of(searchPair.getLeft().intValue(), searchPair.getRight()));
     }
 
     @Override
     public Result<XaHouse> getHouseDetails(XaHousesSearchRequest request) {
-     /*   Long currentThreadId = Thread.currentThread().getId();
-        log.info("---------------------------" + currentThreadId + "--------------------");
-        HeaderThreadLocal threadLocal = HeaderThreadLocal.getThreadInstance();
-        log.info("==============token:" + threadLocal.getToken() + "===============employeeId:" + threadLocal.getEmployeeId());
-
-        ThreadUtils.execute(() -> {
-            for (int i = 0; i < 100000; i++) {
-
-                ThreadUtils.execute(() -> {
-                    System.out.println("------------------");
-                });
+        RLock lock = redissonClient.getLock(request.getId());
+        try {
+            if (lock.tryLock()) {
+                boolean flag = redisBloomFilter.contains(bloomFilterHelper, "HouseFilter", request.getId());
+                if (!flag) {
+                    return null;
+                }
+                Pair<Long, List<XaHouse>> searchPair = xaHouseEsDomain.search(BeanUtils.reqTransform(XaHouseSearchBO.class, request), true);
+                if (searchPair.getLeft() < 1) {
+                    return null;
+                }
+                return Result.success(searchPair.getRight().get(0));
+            } else {
+                return Result.success(null);
             }
-        });
-      */
-        redisTemplate.opsForValue().decrement("longValue");
-        boolean flag = redisBloomFilter.contains(bloomFilterHelper, "HouseFilter", request.getId());
-        if (!flag) {
-            return null;
+        } finally {
+            lock.unlock();
         }
-        Pair<Long, List<XaHouse>> searchPair = xaHouseEsDomain.search(BeanUtils.reqTransform(XaHouseSearchBO.class, request), true);
-        if (searchPair.getLeft() < 1) {
-            return null;
-        }
-        return Result.success(searchPair.getRight().get(0));
     }
 
     /**
